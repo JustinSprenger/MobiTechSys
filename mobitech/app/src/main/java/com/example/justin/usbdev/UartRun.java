@@ -44,11 +44,29 @@ public class UartRun implements Runnable {
 
         try{
         synchronized(this) {
+            String test = "hallo";
+            byte[] testbyte = test.getBytes();
+            int testbyteread;
             UsbDeviceConnection readconnection = null;
             ByteBuffer buffer = ByteBuffer.allocate(1);
 
             UsbDeviceConnection conn = usbManager.openDevice(usbDevice);
             conn.claimInterface(usbInterface, true);
+
+            conn.controlTransfer(0x40, 0, 0, 0, null, 0, 0);//reset
+            conn.controlTransfer(0x40, 0, 1, 0, null, 0, 0);//clear Rx
+            conn.controlTransfer(0x40, 0, 2, 0, null, 0, 0);//clear Tx
+            conn.controlTransfer(0x40, 0x03, 0x001A, 0, null, 0, 0);//baudrate 9600
+
+
+            conn.bulkTransfer(usbOut, testbyte, 1, 0);
+            testbyteread = conn.bulkTransfer(usbIn,testbyte, testbyte.length, 0);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             usbRequest = new UsbRequest();
             usbRequest.initialize(conn, usbIn);
             while (true) {
