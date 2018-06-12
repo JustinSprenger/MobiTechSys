@@ -47,8 +47,8 @@ public class UartRun implements Runnable {
             String test = "hallo";
             byte[] testbyte = test.getBytes();
             int testbyteread;
-            UsbDeviceConnection readconnection = null;
-            ByteBuffer buffer = ByteBuffer.allocate(1);
+            //UsbDeviceConnection readconnection = null;
+            //ByteBuffer buffer = ByteBuffer.allocate(1);
 
             UsbDeviceConnection conn = usbManager.openDevice(usbDevice);
             conn.claimInterface(usbInterface, true);
@@ -67,7 +67,7 @@ public class UartRun implements Runnable {
                     e.printStackTrace();
                 }
 
-            usbRequest = new UsbRequest();
+            /*usbRequest = new UsbRequest();
             usbRequest.initialize(conn, usbIn);
             while (true) {
                 usbRequest.queue(buffer, 1);
@@ -87,7 +87,7 @@ public class UartRun implements Runnable {
                     main.printToTextview("connection closed");
                     break;
                 }
-            }
+            }*/
         }
             /*
 
