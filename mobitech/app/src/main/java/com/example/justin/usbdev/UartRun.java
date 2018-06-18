@@ -123,6 +123,7 @@ public class UartRun implements Runnable {
                     main.printToTextview(e.getMessage());
                 }
                 count++;
+                
             }
             main.printToTextview("Ist raus");
             /*
