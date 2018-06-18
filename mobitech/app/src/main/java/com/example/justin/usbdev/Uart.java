@@ -576,5 +576,14 @@ public class Uart extends AppCompatActivity {
         });
     }
 
+    public void clearTextview()
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv.setText("");
+            }
+        });
+    }
 }
 

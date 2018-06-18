@@ -8,10 +8,12 @@ import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.hardware.usb.UsbRequest;
+import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static android.content.Context.USB_SERVICE;
@@ -29,6 +31,9 @@ public class UartRun implements Runnable {
 
     final int BAUDRATE_115200 = 0x001A;
     final int BAUDRATE_9600 = 0x4138;
+    final int BAUDRATE_57600 = 0x0034;
+    private static final int OFFSET = 2;
+    private final Boolean mEnableAsyncReads;
 
     public UartRun(UsbManager usbManager, UsbDevice usbDevice, UsbInterface usbInterface, UsbEndpoint endIn, UsbEndpoint endOut,Uart main) {
         this.usbManager = usbManager;
@@ -37,15 +42,18 @@ public class UartRun implements Runnable {
         this.usbIn = endIn;
         this.usbOut = endOut;
         this.main = main;
+        mEnableAsyncReads = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1);
     }
 
     @Override
     public void run() {
 
         try{
-        synchronized(this) {
-            String test = "hallo";
+
+            String test = "";
+            int count = 0;
             byte[] testbyte = test.getBytes();
+            byte[] dest = new byte[usbIn.getMaxPacketSize()];
             int testbyteread;
             //UsbDeviceConnection readconnection = null;
             //ByteBuffer buffer = ByteBuffer.allocate(1);
@@ -55,27 +63,116 @@ public class UartRun implements Runnable {
 
             conn.getSerial();
 
-            conn.controlTransfer(0x40, 0, 0, 0, null, 0, 0);//reset
-            conn.controlTransfer(0x40, 0, 1, 0, null, 0, 0);//clear Rx
-            conn.controlTransfer(0x40, 0, 2, 0, null, 0, 0);//clear Tx
-            conn.controlTransfer(0x40, 0x03, BAUDRATE_115200, 0, null, 0, 0);//baudrate 9600
+            //conn.controlTransfer(0x40, 0, 0, 0, null, 0, 0);//reset
+            //conn.controlTransfer(0x40, 0, 1, 0, null, 0, 0);//clear Rx
+            //conn.controlTransfer(0x40, 0, 2, 0, null, 0, 0);//clear Tx
+            //conn.controlTransfer(0x40, 0x03, BAUDRATE_115200, 0, null, 0, 0);//baudrate 9600
 
 
             conn.controlTransfer(0x40, 0, 0, 0, null, 0, 0);// reset
-            // mConnection.controlTransfer(0×40, 0, 1, 0, null, 0, 0);//clear Rx
-            conn.controlTransfer(0x40, 0, 2, 0, null, 0, 0);// clear Tx
+            conn.controlTransfer(0x40, 0, 1, 0, null, 0, 0);//clear Rx
+            //conn.controlTransfer(0x40, 0, 2, 0, null, 0, 0);// clear Tx
             conn.controlTransfer(0x40, 0x02, 0x0000, 0, null, 0, 0);// flowcontrol none
-            conn.controlTransfer(0x40, 0x03, 0x0034, 0, null, 0, 0);// baudrate 57600
+            conn.controlTransfer(0x40, 0x03, BAUDRATE_115200, 0, null, 0, 0);// baudrate
             conn.controlTransfer(0x40, 0x04, 0x0008, 0, null, 0, 0);// data bit 8, parity none, stop bit 1, tx off
 
-            conn.bulkTransfer(usbOut, testbyte, 1, 0);
-            testbyteread = conn.bulkTransfer(usbIn,testbyte, testbyte.length, 0);
+            if(usbDevice == null){
+                main.printToTextview("Device = Null");
+            }
+
+            if(conn == null){
+                main.printToTextview("Connection = Null");
+            }
+
+            if(usbIn == null){
+                main.printToTextview("USB In = Null");
+            }
+
+            if(usbOut == null){
+                main.printToTextview("USB Out = Null");
+            }
+
+            main.printToTextview("in run");
+
+            final UsbRequest request = new UsbRequest();
+            if (mEnableAsyncReads) {
+                if (count > 3) {
+                    main.clearTextview();
+                    count = 0;
+                }
                 try {
+                    main.printToTextview("ist drin");
+                    request.initialize(conn, usbIn);
+                    final ByteBuffer buf = ByteBuffer.wrap(dest);
+                    if (!request.queue(buf, dest.length)) {
+                        throw new IOException("Error queueing request.");
+                    }
+                    usbRequest = request;
+                    final UsbRequest response = conn.requestWait();
+                    synchronized (mEnableAsyncReads) {
+                        usbRequest = null;
+                        main.printToTextview("hier");
+                    }
+                    if (response == null) {
+                        throw new IOException("Null response");
+                    }
+                    final int nread = buf.position();
+                    main.printToTextview(nread + "" + buf.getChar(0));
+                    Thread.sleep(200);
+                } catch (Exception e) {
+                    main.printToTextview(e.getMessage());
+                }
+                count++;
+            }
+            main.printToTextview("Ist raus");
+            /*
+            while (usbIn != null && conn != null) {
+                    byte[] recordIn = new byte[usbIn.getMaxPacketSize()];
+                    int receivedLength = conn.bulkTransfer(usbIn, recordIn,
+                            recordIn.length, 500);
+                    if (receivedLength > -1){
+                        for(int i = 0;i<recordIn.length;i++){
+                            main.printToTextview(recordIn[i]+"");
+
+                        }
+                    }
+            }
+            */
+            /*
+            while (true) {
+                String message = "";
+                if (count > 3){
+                    main.clearTextview();
+                    count = 0;
+                }
+
+                conn.bulkTransfer(usbIn, data, data.length, 500);
+                Thread.sleep(500);
+                for(int i = 0;i<data.length;i++){
+                    message = message + data[i];
+
+                }
+                main.printToTextview(message + " (Runnable)");
+                count++;
+            }*/
+
+
+            //conn.bulkTransfer(usbOut, testbyte, 1, 0);
+            /*while (true) {
+                if (count > 10){
+                    main.clearTextview();
+                    count = 0;
+                }
+                try {
+                    testbyteread = conn.bulkTransfer(usbIn, testbyte, testbyte.length, 100);
+
+                    main.printToTextview(testbyteread + " (Runnable)");
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                count++;
+            }*/
             /*usbRequest = new UsbRequest();
             usbRequest.initialize(conn, usbIn);
             while (true) {
@@ -97,7 +194,6 @@ public class UartRun implements Runnable {
                     break;
                 }
             }*/
-        }
             /*
 
             conn.getSerial();
