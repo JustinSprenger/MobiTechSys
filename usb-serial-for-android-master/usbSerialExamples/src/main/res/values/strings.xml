@@ -4,7 +4,6 @@
     <string name="app_title">USB UART Chat</string>
     <string name="app_name">Chat</string>
     <string name="refreshing">Refreshing...</string>
-    <string name="textBtnRTS">RTS - Request To Send</string>
-    <string name="textBtnDTR">DTR - Data Terminal Ready</string>
+    <string name="title_activity_props">Props</string>
 
 </resources>

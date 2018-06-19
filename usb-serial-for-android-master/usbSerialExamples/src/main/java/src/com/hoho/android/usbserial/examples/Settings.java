@@ -13,6 +13,10 @@ public class Settings {
         this.databits = databits;
     }
 
+    public Settings(){
+
+    }
+
     public int getBaudrate() {
         return baudrate;
     }
