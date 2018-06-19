@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Props"
+    tools:context="src.com.hoho.android.usbserial.examples.Props"
     tools:showIn="@layout/activity_props">
 
 </android.support.constraint.ConstraintLayout>
