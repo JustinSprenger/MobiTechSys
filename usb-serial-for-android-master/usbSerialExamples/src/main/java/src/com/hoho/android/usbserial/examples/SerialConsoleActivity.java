@@ -67,8 +67,6 @@ public class SerialConsoleActivity extends Activity {
     private TextView mTitleTextView;
     private TextView mDumpTextView;
     private ScrollView mScrollView;
-    private CheckBox chkDTR;
-    private CheckBox chkRTS;
 
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
@@ -100,29 +98,7 @@ public class SerialConsoleActivity extends Activity {
         mTitleTextView = (TextView) findViewById(R.id.demoTitle);
         mDumpTextView = (TextView) findViewById(R.id.consoleText);
         mScrollView = (ScrollView) findViewById(R.id.demoScroller);
-        chkDTR = (CheckBox) findViewById(R.id.checkBoxDTR);
-        chkRTS = (CheckBox) findViewById(R.id.checkBoxRTS);
-
-        chkDTR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    sPort.setDTR(isChecked);
-                }catch (IOException x){}
-            }
-        });
-
-        chkRTS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    sPort.setRTS(isChecked);
-                }catch (IOException x){}
-            }
-        });
-
     }
-
 
     @Override
     protected void onPause() {
@@ -227,5 +203,4 @@ public class SerialConsoleActivity extends Activity {
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
-
 }
