@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -12,6 +13,12 @@ import com.hoho.android.usbserial.examples.R;
 
 public class Props extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Settings sett;
+
+    private EditText editText1;
+    private EditText editText2;
+    private EditText editText3;
+    private EditText editText4;
+    private EditText editText5;
 
     private Spinner spinner;
     private Spinner spinner1;
@@ -38,6 +45,18 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
         spinner1 = (Spinner)findViewById(R.id.spinner1);
         spinner2 = (Spinner)findViewById(R.id.spinner2);
         spinner3 = (Spinner)findViewById(R.id.spinner3);
+
+        editText1 = (EditText)findViewById(R.id.editText1);
+        editText2 = (EditText)findViewById(R.id.editText2);
+        editText3 = (EditText)findViewById(R.id.editText3);
+        editText4 = (EditText)findViewById(R.id.editText4);
+        editText5 = (EditText)findViewById(R.id.editText5);
+
+        editText1.setFocusableInTouchMode(false);
+        editText2.setFocusableInTouchMode(false);
+        editText3.setFocusableInTouchMode(false);
+        editText4.setFocusableInTouchMode(false);
+        editText5.setFocusableInTouchMode(false);
 
         adapterbaud = new ArrayAdapter<String>(Props.this, android.R.layout.simple_spinner_item,bauditems);
         adapterdatabit = new ArrayAdapter<String>(Props.this, android.R.layout.simple_spinner_item,databititems);
