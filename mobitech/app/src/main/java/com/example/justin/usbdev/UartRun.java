@@ -69,12 +69,12 @@ public class UartRun implements Runnable {
             //conn.controlTransfer(0x40, 0x03, BAUDRATE_115200, 0, null, 0, 0);//baudrate 9600
 
 
-            conn.controlTransfer(0x40, 0, 0, 0, null, 0, 0);// reset
-            conn.controlTransfer(0x40, 0, 1, 0, null, 0, 0);//clear Rx
+            conn.controlTransfer(0x41, 0, 0, 0, null, 0, 0);// reset
+            conn.controlTransfer(0x41, 0, 1, 0, null, 0, 0);//clear Rx
             //conn.controlTransfer(0x40, 0, 2, 0, null, 0, 0);// clear Tx
-            conn.controlTransfer(0x40, 0x02, 0x0000, 0, null, 0, 0);// flowcontrol none
-            conn.controlTransfer(0x40, 0x03, BAUDRATE_115200, 0, null, 0, 0);// baudrate
-            conn.controlTransfer(0x40, 0x04, 0x0008, 0, null, 0, 0);// data bit 8, parity none, stop bit 1, tx off
+            conn.controlTransfer(0x41, 0x02, 0x0000, 0, null, 0, 0);// flowcontrol none
+            conn.controlTransfer(0x41, 0x03, BAUDRATE_115200, 0, null, 0, 0);// baudrate
+            conn.controlTransfer(0x41, 0x04, 0x0008, 0, null, 0, 0);// data bit 8, parity none, stop bit 1, tx off
 
             if(usbDevice == null){
                 main.printToTextview("Device = Null");
@@ -123,7 +123,7 @@ public class UartRun implements Runnable {
                     main.printToTextview(e.getMessage());
                 }
                 count++;
-                
+
             }
             main.printToTextview("Ist raus");
             /*
