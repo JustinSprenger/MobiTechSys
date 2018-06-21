@@ -13,12 +13,14 @@ import com.hoho.android.usbserial.examples.R;
 
 public class Props extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Settings sett;
+    String username = "";
 
     private EditText editText1;
     private EditText editText2;
     private EditText editText3;
     private EditText editText4;
     private EditText editText5;
+    private EditText editUsername;
 
     private Spinner spinner;
     private Spinner spinner1;
@@ -51,6 +53,7 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
         editText3 = (EditText)findViewById(R.id.editText3);
         editText4 = (EditText)findViewById(R.id.editText4);
         editText5 = (EditText)findViewById(R.id.editText5);
+        editUsername = (EditText) findViewById(R.id.editText6);
 
         editText1.setFocusableInTouchMode(false);
         editText2.setFocusableInTouchMode(false);
@@ -166,6 +169,10 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
                     break;
             }
         }
+    }
+
+    public void saveChanges(View v){
+        username = editUsername.getText().toString();
     }
 
     @Override
