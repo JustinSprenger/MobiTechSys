@@ -28,10 +28,12 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.examples.R;
@@ -69,6 +71,36 @@ public class SerialConsoleActivity extends Activity {
     private ScrollView mScrollView;
     private CheckBox chkDTR;
     private CheckBox chkRTS;
+    private TextView sendText;
+
+    public void sendButton(View v){
+        try {
+            String msg = sendText.getText().toString();
+            Toast.makeText(this, msg.getBytes().toString(), Toast.LENGTH_SHORT).show();
+            senden(msg);
+            sendText.setText("");
+        } catch (Exception e) {
+            e.getCause();
+        }
+
+    }
+
+    public void senden(String msg) {
+        try {
+            //Keys funktionsfähig machen und SendText appenden
+            String firstKey = "+++";
+            String secondKey = "ato";
+            mSerialIoManager.writeAsync(firstKey.getBytes());
+            mSerialIoManager.writeAsync(secondKey.getBytes());
+            mSerialIoManager.writeAsync(msg.getBytes());
+        } catch (Exception e) {
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+
+
+    }
+
 
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
@@ -102,6 +134,8 @@ public class SerialConsoleActivity extends Activity {
         mScrollView = (ScrollView) findViewById(R.id.demoScroller);
         chkDTR = (CheckBox) findViewById(R.id.checkBoxDTR);
         chkRTS = (CheckBox) findViewById(R.id.checkBoxRTS);
+        sendText = (TextView) findViewById(R.id.sendText);
+
 
         chkDTR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
