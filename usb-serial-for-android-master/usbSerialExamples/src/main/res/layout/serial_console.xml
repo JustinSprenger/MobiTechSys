@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    android:layout_height="match_parent" >
     <TextView
         android:id="@+id/demoTitle"
         android:layout_width="match_parent"
@@ -19,51 +18,31 @@
         android:layout_height="1dip"
         android:background="#eeeeee" />
 
-    <CheckBox
-        android:id="@+id/checkBoxDTR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textBtnDTR" />
-
-
-    <CheckBox
-        android:id="@+id/checkBoxRTS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/textBtnRTS" />
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:text="Configuration" />
 
     <View
         android:id="@+id/separator2"
         android:layout_width="match_parent"
-        android:layout_height="1dip"
         android:layout_below="@+id/demoTitle"
+        android:layout_height="1dip"
         android:background="#eeeeee" />
 
     <ScrollView
         android:id="@+id/demoScroller"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+         >
 
+        <TextView
+            android:id="@+id/consoleText"
+            android:textIsSelectable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:typeface="monospace" />
     </ScrollView>
 
-    <EditText
-        android:id="@+id/sendText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="118dp"
-        android:layout_height="wrap_content"
-        android:onClick="sendButton"
-        android:text="Send" />
-
-    <TextView
-        android:id="@+id/consoleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:typeface="monospace" />
 </LinearLayout>
