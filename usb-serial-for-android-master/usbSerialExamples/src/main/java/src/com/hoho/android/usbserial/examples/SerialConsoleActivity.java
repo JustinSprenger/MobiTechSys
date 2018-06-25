@@ -73,7 +73,9 @@ public class SerialConsoleActivity extends Activity {
     private CheckBox chkRTS;
     private TextView sendText;
 
-    public void sendButton(View v){
+    Settings sett;
+
+    public void sendenButton(View v){
         try {
             String msg = sendText.getText().toString();
             Toast.makeText(this, msg.getBytes().toString(), Toast.LENGTH_SHORT).show();
@@ -82,7 +84,6 @@ public class SerialConsoleActivity extends Activity {
         } catch (Exception e) {
             e.getCause();
         }
-
     }
 
     public void senden(String msg) {
@@ -90,17 +91,18 @@ public class SerialConsoleActivity extends Activity {
             //Keys funktionsfähig machen und SendText appenden
             String firstKey = "+++";
             String secondKey = "ato";
-            mSerialIoManager.writeAsync(firstKey.getBytes());
-            mSerialIoManager.writeAsync(secondKey.getBytes());
+            //mSerialIoManager.writeAsync(firstKey.getBytes());
+            //mSerialIoManager.writeAsync(secondKey.getBytes());
             mSerialIoManager.writeAsync(msg.getBytes());
         } catch (Exception e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
-
-
-
     }
 
+    public void configuration(View v){
+        Intent intent = new Intent(this, Props.class);
+        startActivity(intent);
+    }
 
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
@@ -136,6 +138,10 @@ public class SerialConsoleActivity extends Activity {
         chkRTS = (CheckBox) findViewById(R.id.checkBoxRTS);
         sendText = (TextView) findViewById(R.id.sendText);
 
+        Intent i = getIntent();
+        if(i != null){
+            sett = (Settings)i.getSerializableExtra("settings");
+        }
 
         chkDTR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -154,7 +160,6 @@ public class SerialConsoleActivity extends Activity {
                 }catch (IOException x){}
             }
         });
-
     }
 
 

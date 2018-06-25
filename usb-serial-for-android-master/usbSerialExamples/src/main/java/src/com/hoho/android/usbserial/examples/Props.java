@@ -1,5 +1,6 @@
 package src.com.hoho.android.usbserial.examples;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,9 +12,15 @@ import android.widget.Toast;
 
 import com.hoho.android.usbserial.examples.R;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 public class Props extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Settings sett;
     String username = "";
+    int baudrate = 0;
+    int databit = 0;
+    int startstop = 0;
+    int parity = 0;
 
     private EditText editText1;
     private EditText editText2;
@@ -83,96 +90,105 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
         spinner3.setOnItemSelectedListener(this);
     }
 
+    public void saveChanges(View view){
+        username = editUsername.getText().toString();
+        sett.setBaudrate(baudrate);
+        sett.setDatabits(databit);
+        sett.setStopbit(startstop);
+        sett.setParity(parity);
+        sett.setUsername(username);
+
+        Intent intent = new Intent(this, SerialConsoleActivity.class);
+        intent.putExtra("settings", sett);
+        startActivity(intent);
+    }
+
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
         if(parent.getAdapter().equals(adapterbaud)){
             switch (position) {
                 case 0:
-                    sett.setBaudrate(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getBaudrate(), Toast.LENGTH_SHORT).show();
+                    baudrate = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 1:
-                    sett.setBaudrate(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getBaudrate(), Toast.LENGTH_SHORT).show();
+                    baudrate = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
             }
         }else if (parent.getAdapter().equals(adapterdatabit)){
             switch (position) {
                 case 0:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 1:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 2:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 3:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 4:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 5:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 6:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 7:
-                    sett.setDatabits(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getDatabits(), Toast.LENGTH_SHORT).show();
+                    databit = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
             }
         }else if (parent.getAdapter().equals(adapterstartstop)){
             switch (position) {
                 case 0:
-                    sett.setStopbit(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getStopbit(), Toast.LENGTH_SHORT).show();
+                    startstop = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 1:
-                    sett.setStopbit(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getStopbit(), Toast.LENGTH_SHORT).show();
+                    startstop = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 2:
-                    sett.setStopbit(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getStopbit(), Toast.LENGTH_SHORT).show();
+                    startstop = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
             }
         }else if (parent.getAdapter().equals(adapterparity)){
             switch (position) {
                 case 0:
-                    sett.setParity(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getParity(), Toast.LENGTH_SHORT).show();
+                    parity = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 1:
-                    sett.setParity(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getParity(), Toast.LENGTH_SHORT).show();
+                    parity = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 2:
-                    sett.setParity(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getParity(), Toast.LENGTH_SHORT).show();
+                    parity = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 3:
-                    sett.setParity(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getParity(), Toast.LENGTH_SHORT).show();
+                    parity = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
                 case 4:
-                    sett.setParity(Integer.parseInt(parent.getAdapter().getItem(position).toString()));
                     Toast.makeText(this, "gesetzt: " + sett.getParity(), Toast.LENGTH_SHORT).show();
+                    parity = Integer.parseInt(parent.getAdapter().getItem(position).toString());
                     break;
             }
         }
-    }
-
-    public void saveChanges(View v){
-        username = editUsername.getText().toString();
     }
 
     @Override

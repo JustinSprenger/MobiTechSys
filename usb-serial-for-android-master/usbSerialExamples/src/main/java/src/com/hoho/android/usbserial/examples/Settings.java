@@ -1,16 +1,20 @@
 package src.com.hoho.android.usbserial.examples;
 
-public class Settings {
+import java.io.Serializable;
+
+public class Settings implements Serializable {
     private int baudrate;
     private int parity;
     private int stopbit;
     private int databits;
+    private String username;
 
-    public Settings(int baudrate, int parity, int stopbit, int databits){
+    public Settings(int baudrate, int parity, int stopbit, int databits, String username){
         this.baudrate = baudrate;
         this.parity = parity;
         this.stopbit = stopbit;
         this.databits = databits;
+        this.username = username;
     }
 
     public Settings(){
@@ -33,6 +37,10 @@ public class Settings {
         return databits;
     }
 
+    public String getUsername(){
+        return username;
+    }
+
     public void setBaudrate(int baudrate) {
         this.baudrate = baudrate;
     }
@@ -47,5 +55,9 @@ public class Settings {
 
     public void setDatabits(int databits) {
         this.databits = databits;
+    }
+
+    public void setUsername(String username){
+        this.username = username;
     }
 }
