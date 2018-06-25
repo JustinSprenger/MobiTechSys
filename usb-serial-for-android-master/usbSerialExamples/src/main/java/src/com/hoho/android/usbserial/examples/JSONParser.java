@@ -16,7 +16,7 @@ public class JSONParser {
     JSONObject settings = null;
     String in;
 
-    public JSONParser(Context context, String sets){
+    public JSONParser(Context context){
         try {
             AssetManager mngr = context.getAssets();
             InputStream input = mngr.open("settings.json");
@@ -39,44 +39,44 @@ public class JSONParser {
         }
     }
 
-    public String getBaudrate(){
-        String baud = null;
+    public int getBaudrate(){
+        int baud = 0;
         try {
             settings = reader.getJSONObject("settings");
-            baud = settings.getString("baudrate");
+            baud = settings.getInt("baudrate");
         }catch (Exception e){
             e.printStackTrace();
         }
         return baud;
     }
 
-    public String getDataBit(){
-        String databit = null;
+    public int getDataBit(){
+        int databit = 0;
         try {
             settings = reader.getJSONObject("settings");
-            databit = settings.getString("username");
+            databit = settings.getInt("databit");
         }catch (Exception e){
             e.printStackTrace();
         }
         return databit;
     }
 
-    public String getStartStop(){
-        String startstop = null;
+    public int getStartStop(){
+        int startstop = 0;
         try {
             settings = reader.getJSONObject("settings");
-            startstop = settings.getString("username");
+            startstop = settings.getInt("startstop");
         }catch (Exception e){
             e.printStackTrace();
         }
         return startstop;
     }
 
-    public String getParity(){
-        String parity = null;
+    public int getParity(){
+        int parity = 0;
         try {
             settings = reader.getJSONObject("settings");
-            parity = settings.getString("username");
+            parity = settings.getInt("parity");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -88,8 +88,10 @@ public class JSONParser {
         try {
             settings = reader.getJSONObject("settings");
             user = settings.getString("username");
+            user = user + "hat geklappt";
         }catch (Exception e){
             e.printStackTrace();
+            user = "Exception";
         }
         return user;
     }

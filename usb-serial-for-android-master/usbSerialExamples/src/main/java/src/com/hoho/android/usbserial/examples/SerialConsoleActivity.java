@@ -53,6 +53,7 @@ import java.util.concurrent.Executors;
 public class SerialConsoleActivity extends Activity {
 
     private final String TAG = SerialConsoleActivity.class.getSimpleName();
+    JSONParser json;
 
     /**
      * Driver instance, passed in statically via
@@ -137,6 +138,17 @@ public class SerialConsoleActivity extends Activity {
         chkDTR = (CheckBox) findViewById(R.id.checkBoxDTR);
         chkRTS = (CheckBox) findViewById(R.id.checkBoxRTS);
         sendText = (TextView) findViewById(R.id.sendText);
+
+        json = new JSONParser(getApplicationContext());
+        sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername());
+        //sett.setUsername(json.getUsername());
+        //sett.setBaudrate(json.getBaudrate());
+        //sett.setDatabits(json.getDataBit());
+        //sett.setStopbit(json.getStartStop());
+        //sett.setParity(json.getParity());
+
+        Toast.makeText(this, sett.getUsername(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, sett.getBaudrate(), Toast.LENGTH_LONG).show();
 
         Intent i = getIntent();
         if(i != null){

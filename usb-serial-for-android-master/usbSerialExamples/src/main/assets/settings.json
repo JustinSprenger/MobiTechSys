@@ -1,10 +1,10 @@
 {
-  "sys":
+  "settings":
   {
     "baudrate":115200,
     "databit":1,
     "startstop":1,
     "parity":1,
-    "username":""
+    "username":"Mustermann"
   }
 }
