@@ -1,0 +1,16 @@
+\BOOKMARK [1][-]{section.1}{Einleitung}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Problem- und Aufgabenstellung}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Grundlagen}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{BVG-Datenbank}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{JavaFX}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{JDBC-API}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Erstellen der Anwendung}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{MySQL-Import einer Oracle Dumpfile}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Analyse der Datens\344tze aus der Dumpfile}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Implementieren der Hauptanwendung}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.4}{Implementieren einer Datenbank-Schnittstelle}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.5}{Berechnung der Position der einzelnen Busse\(Zeitabstand\)}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{Ergebnis}{}% 13
+\BOOKMARK [1][-]{section.5}{Literaturverzeichnis}{}% 14
+\BOOKMARK [1][-]{section.6}{Anhang}{}% 15
+\BOOKMARK [2][-]{subsection.6.1}{Alle ausgearbeiteten SQL-Abfragen}{section.6}% 16

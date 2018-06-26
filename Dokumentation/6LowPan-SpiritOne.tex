@@ -1,0 +1,148 @@
+\documentclass[a4paper, 12.5pt]{scrartcl}
+\usepackage{german}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\graphicspath{{./Figures/}}
+\usepackage{hyperref}
+
+
+\begin{document}
+
+
+\begin{titlepage}
+\author{Justin Sprenger (s0556255), 
+Lukas Wagner (s0)} 
+\title{- 6LowPan-SpiritOne -} 
+\date{\today} 
+\maketitle
+\end{titlepage}
+
+\tableofcontents
+\newpage
+\section{Einleitung}
+\subsection{Problem- und Aufgabenstellung}
+
+Die Aufgabe besteht darin, eine Smartphone Applikation zu erstellen, womit es möglich ist Daten an einen 6LowPan-Dongle über die UART-Schnittstelle zu übertragen. Der Dongle Tauscht anschließend die Daten die er empfangen hat mit einem weiteren Dongle aus. Auf der anderen seite sollen danach die Daten wieder über die Uart schnittstelle ans Smartphone übertragen werden. Ziel dieser Aufgabe ist es ein kleines Chat-Programm zu erstellen welches die UART-Schnittstelle implementiert hat.
+
+Die Dongles benötigen ausschließlich das OS des Herstellers 
+
+\section{Grundlagen}
+
+\subsection{UART-Schnittstelle}
+
+
+
+\subsection{USBHost} 
+
+USBHost ist eine Libary von Google, welche es ermöglicht Daten Seriell über die USB-Schnittstelle(OTG-Adapter) zu übertragen. 
+
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[scale=0.6]{javafx.png}
+%	\caption{JavaFx Architektur}
+%	\label{img:JavaFX}
+%\end{figure}
+%\newpage
+
+\subsection{usb-serial-for-Android}
+
+usb-Serial-for-Android ist eine API von ...
+Diese API enthält Treiber für einige Serielle Geräte und ermöglicht eine einfachere Implementierung für den Synchronen und Asynchronen Datenaustausch zwischen den Dongles.
+
+\section{Erstellen der Anwendung}
+
+\subsection{Ansätze}
+Zunächst war der Ansatz die USBHost Libary von Google zu verwenden, jedoch traten einige Probleme auf. Die Libary benötige sämtliche Daten als Hex-code. Das Problem welches sich hier ergab war das Geräte-Modell in Hex-code anzugeben.
+
+\subsection{Umstieg auf die usb-serial-for-Android API}
+
+
+
+\subsection{Implementieren der Hauptanwendung}
+
+\subsection{Implementieren eine JSON-Parsers und der Settings}
+
+\section{Ergebnis}
+
+\section{Literaturverzeichnis}
+\begin{thebibliography}{1}
+
+  \bibitem{JavaFX} Christian Ullenboom {\em Java ist auch eine Insel (Auflage 12)} 2016.
+
+\bibitem{JavaFX Overview (Release 8)}JavaFX Overview (Release 8) {\em https://docs.oracle.com/javase/8/javafx/get-started-tutorial/jfx-overview.htm\#JFXST784}
+
+\bibitem{Java JDBC API}Java JDBC API {\em https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/}
+
+\bibitem{Java SE Technologies}Java SE Technologies {\em http://www.oracle.com/technetwork/java/javase/jdbc/index.html}
+
+\bibitem{JavaFX Tutorial}JAXenter 6 März 2017 {\em https://jaxenter.de/java-tutorial-javafx-53878}
+
+\bibitem{Java Servlet Programming}Java Servlet Programming {\em https://docstore.mik.ua/orelly/java-ent/servlet/ch09\_02.htm}
+
+\bibitem{Oracle Java Documentation}Oracle Java Documentation {\em https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/}
+
+\bibitem{ora 2 MySQL}Ora2SQL Converter{\em https://www.convert-in.com/ord2sql.htm}
+
+\end{thebibliography}
+
+\section{Anhang}
+
+\subsection{Alle ausgearbeiteten SQL-Abfragen}
+\\
+\begin{small}
+\textbf{----- Aktueller Bus -----}
+\\ \\
+\hyperref[sec:jump]{siehe Punkt 3.2 - Analyse der Datensätze aus der Dumpfile}
+\newline 
+\\ \textbf{----- Nachfolgender Bus -----}
+\newline 
+\newline SELECT NP\_ID\_TO
+\newline FROM LINKS
+\newline WHERE NP\_ID like 3564322669
+\newline 
+\newline SELECT NP\_ID
+\newline FROM POINTS\_ON\_ROUTE
+\newline WHERE LDI\_ID like 10606661 and ROU\_NO like 118
+\newline 
+\newline SELECT ID
+\newline FROM NETWORK\_POINTS
+\newline WHERE ID like 3564322920 and Name like 'U Osloer Str.' 
+\newline 
+\newline SELECT VSCS\_ID
+\newline FROM NETWORK\_POINTS
+\newline WHERE ID like 3564322920 and Name like 'U Osloer Str.'
+\newline 
+\newline SELECT TIMETABLE\_DELAY, LAST\_POR\_ORDER
+\newline FROM CM\_VEHICLE\_POSITIONS
+\newline WHERE VSCS\_ID Like '167'
+\newline 
+\\ \textbf{----- Voriger Bus -----}
+\newline 
+\newline SELECT NP\_ID
+\newline FROM LINKS
+\newline WHERE NP\_ID\_TO like 3564322669 and ID like 728
+\newline 
+\newline SELECT NP\_ID
+\newline FROM POINTS\_ON\_ROUTE
+\newline WHERE LDI\_ID like 10606661 and ROU\_NO like 118
+\newline 
+\newline SELECT ID
+\newline FROM NETWORK\_POINTS
+\newline WHERE ID like 3564322920 and Name like 'U Osloer Str.' 
+\newline 
+\newline SELECT VSCS\_ID
+\newline FROM NETWORK\_POINTS
+\newline WHERE ID like 3564322920 and Name like 'U Osloer Str.'
+\newline 
+\newline SELECT TIMETABLE\_DELAY, LAST\_POR\_ORDER
+\newline FROM CM\_VEHICLE\_POSITIONS
+\newline WHERE VSCS\_ID Like '167'
+\newline 
+\\ \textbf{----- Richtung -----}
+\newline 
+\newline SELECT REMARK
+\newline FROM LINES
+\newline WHERE NO like 255
+\end{small}
+\end{document}
