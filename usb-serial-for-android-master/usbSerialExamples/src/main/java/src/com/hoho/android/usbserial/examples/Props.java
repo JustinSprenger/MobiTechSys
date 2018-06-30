@@ -1,5 +1,6 @@
 package src.com.hoho.android.usbserial.examples;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,11 +11,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.examples.R;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class Props extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private static UsbSerialPort sPort = null;
+
     Settings sett;
     String username = "";
     int baudrate = 0;
@@ -98,9 +102,17 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
         sett.setParity(parity);
         sett.setUsername(username);
 
-        Intent intent = new Intent(this, SerialConsoleActivity.class);
-        intent.putExtra("settings", sett);
-        startActivity(intent);
+        JSONParser json = new JSONParser(getApplicationContext()); //Parser
+        json.setBaudrate(baudrate); //init Settings
+        json.setDataBit(databit); //init Settings
+        json.setStartStop(startstop); //init Settings
+        json.setParity(parity); //init Settings
+        json.setUsername(username); //init Settings
+
+        SerialConsoleActivity.showagain(this,sPort,sett);
+        //Intent intent = new Intent(this, SerialConsoleActivity.class);
+        //intent.putExtra("settings", sett);
+        //startActivity(intent);
     }
 
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
@@ -195,4 +207,12 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    public static void show(Context context, UsbSerialPort port) {
+        sPort = port;
+        final Intent intent = new Intent(context, Props.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
+    }
+
 }

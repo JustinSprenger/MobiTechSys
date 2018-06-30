@@ -35,30 +35,30 @@ public class HexDump {
         byte[] line = new byte[16];
         int lineIndex = 0;
 
-        result.append("\n0x");
-        result.append(toHexString(offset));
+        //result.append("\n0x");
+        //result.append(toHexString(offset));
 
         for (int i = offset; i < offset + length; i++) {
             if (lineIndex == 16) {
-                result.append(" ");
+                //result.append(" ");
 
                 for (int j = 0; j < 16; j++) {
                     if (line[j] > ' ' && line[j] < '~') {
                         result.append(new String(line, j, 1));
                     } else {
-                        result.append(".");
+                        //result.append(".");
                     }
                 }
-
-                result.append("\n0x");
-                result.append(toHexString(i));
+                //result.append("\n");
+                //result.append("\n0x");
+                //result.append(toHexString(i));
                 lineIndex = 0;
             }
 
             byte b = array[i];
-            result.append(" ");
-            result.append(HEX_DIGITS[(b >>> 4) & 0x0F]);
-            result.append(HEX_DIGITS[b & 0x0F]);
+            //result.append(" ");
+            //result.append(HEX_DIGITS[(b >>> 4) & 0x0F]);
+            //result.append(HEX_DIGITS[b & 0x0F]);
 
             line[lineIndex++] = b;
         }
@@ -67,7 +67,7 @@ public class HexDump {
             int count = (16 - lineIndex) * 3;
             count++;
             for (int i = 0; i < count; i++) {
-                result.append(" ");
+                //result.append(" ");
             }
 
             for (int i = 0; i < lineIndex; i++) {

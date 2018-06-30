@@ -3,14 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    <TextView
-        android:id="@+id/demoTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="@string/app_title"
-        android:textSize="24sp"
-        android:textStyle="bold" />
 
     <View
         android:id="@+id/separator"
@@ -18,38 +10,29 @@
         android:layout_height="1dip"
         android:background="#eeeeee" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:onClick="configuration"
-        android:text="Configuration" />
-
-    <CheckBox
-        android:id="@+id/checkBoxRTS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="RTS" />
-
-    <CheckBox
-        android:id="@+id/checkBoxDTR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DTR" />
-
-    <EditText
-        android:id="@+id/sendText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="118dp"
-        android:layout_height="wrap_content"
-        android:onClick="sendenButton"
-        android:text="Send" />
+        <TextView
+            android:id="@+id/demoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:text="@string/app_title"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:onClick="configuration"
+            android:text="Config" />
+    </LinearLayout>
 
     <View
         android:id="@+id/separator2"
@@ -61,7 +44,7 @@
     <ScrollView
         android:id="@+id/demoScroller"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="405dp">
 
         <TextView
             android:id="@+id/consoleText"
@@ -70,6 +53,28 @@
             android:textIsSelectable="true"
             android:typeface="monospace" />
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/sendText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="118dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:onClick="sendenButton"
+            android:text="Send" />
+    </LinearLayout>
 
 
 </LinearLayout>

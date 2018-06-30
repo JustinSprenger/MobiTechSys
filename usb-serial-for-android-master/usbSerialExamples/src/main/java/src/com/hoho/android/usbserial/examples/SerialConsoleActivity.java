@@ -53,7 +53,7 @@ import java.util.concurrent.Executors;
 public class SerialConsoleActivity extends Activity {
 
     private final String TAG = SerialConsoleActivity.class.getSimpleName();
-    JSONParser json;
+    private static JSONParser json;
 
     /**
      * Driver instance, passed in statically via
@@ -70,12 +70,11 @@ public class SerialConsoleActivity extends Activity {
     private TextView mTitleTextView;
     private TextView mDumpTextView;
     private ScrollView mScrollView;
-    private CheckBox chkDTR;
-    private CheckBox chkRTS;
     private TextView sendText;
-    private boolean ato=false;
+    private String firstKey = "+++++";
+    private String user="<>";
 
-    Settings sett;
+    private static Settings sett;
 
     public void sendenButton(View v){
         try {
@@ -91,24 +90,18 @@ public class SerialConsoleActivity extends Activity {
     public void senden(String msg) {
         try {
             //Keys funktionsfähig machen und SendText appenden
-            if(ato != true){
-                String firstKey = "+++";
-                String secondKey = "ato";
-                mSerialIoManager.writeAsync(firstKey.getBytes());
-                mSerialIoManager.writeAsync(secondKey.getBytes());
-                ato = true;
-                Toast.makeText(this, "+++ ato wurde gesetzt", Toast.LENGTH_SHORT).show();
-            }
-            mSerialIoManager.writeAsync(msg.getBytes());
-            Toast.makeText(this, "+++ ato", Toast.LENGTH_SHORT).show();
+            mSerialIoManager.writeAsync((firstKey + user + " " + msg).getBytes());
+            //mSerialIoManager.writeAsync(user.getBytes());
+            //mSerialIoManager.writeAsync(msg.getBytes());
         } catch (Exception e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void configuration(View v){
-        Intent intent = new Intent(this, Props.class);
-        startActivity(intent);
+        Props.show(this,sPort);
+        //Intent intent = new Intent(this, Props.class);
+        //startActivity(intent);
     }
 
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
@@ -141,45 +134,18 @@ public class SerialConsoleActivity extends Activity {
         mTitleTextView = (TextView) findViewById(R.id.demoTitle);
         mDumpTextView = (TextView) findViewById(R.id.consoleText);
         mScrollView = (ScrollView) findViewById(R.id.demoScroller);
-        chkDTR = (CheckBox) findViewById(R.id.checkBoxDTR);
-        chkRTS = (CheckBox) findViewById(R.id.checkBoxRTS);
         sendText = (TextView) findViewById(R.id.sendText);
 
         json = new JSONParser(getApplicationContext());
         sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername());
-        //sett.setUsername(json.getUsername());
-        //sett.setBaudrate(json.getBaudrate());
-        //sett.setDatabits(json.getDataBit());
-        //sett.setStopbit(json.getStartStop());
-        //sett.setParity(json.getParity());
 
         Toast.makeText(this, sett.getUsername(), Toast.LENGTH_LONG).show();
-        //Toast.makeText(this, sett.getBaudrate(), Toast.LENGTH_LONG).show();
 
         Intent i = getIntent();
         if(i != null){
             sett = (Settings)i.getSerializableExtra("settings");
         }
-
-        chkDTR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    sPort.setDTR(isChecked);
-                }catch (IOException x){}
-            }
-        });
-
-        chkRTS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    sPort.setRTS(isChecked);
-                }catch (IOException x){}
-            }
-        });
     }
-
 
     @Override
     protected void onPause() {
@@ -205,6 +171,10 @@ public class SerialConsoleActivity extends Activity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "Resumed, port=" + sPort);
+
+        json = new JSONParser(getApplicationContext()); //Parser
+        sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername()); //init Settings
+
         if (sPort == null) {
             mTitleTextView.setText("No serial device.");
         } else {
@@ -218,15 +188,14 @@ public class SerialConsoleActivity extends Activity {
 
             try {
                 sPort.open(connection);
+                //sPort.setParameters(sett.getBaudrate(), sett.getDatabits(), sett.getStopbit(), sett.getParity());
+                try {
+                    Toast.makeText(this, sett.getUsername() + "Baudrate", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(this, "Exception", Toast.LENGTH_SHORT).show();
+                }
+                user = "<" + sett.getUsername() + ">";
                 sPort.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-
-                showStatus(mDumpTextView, "CD  - Carrier Detect", sPort.getCD());
-                showStatus(mDumpTextView, "CTS - Clear To Send", sPort.getCTS());
-                showStatus(mDumpTextView, "DSR - Data Set Ready", sPort.getDSR());
-                showStatus(mDumpTextView, "DTR - Data Terminal Ready", sPort.getDTR());
-                showStatus(mDumpTextView, "DSR - Data Set Ready", sPort.getDSR());
-                showStatus(mDumpTextView, "RI  - Ring Indicator", sPort.getRI());
-                showStatus(mDumpTextView, "RTS - Request To Send", sPort.getRTS());
 
             } catch (IOException e) {
                 Log.e(TAG, "Error setting up device: " + e.getMessage(), e);
@@ -247,6 +216,7 @@ public class SerialConsoleActivity extends Activity {
     private void stopIoManager() {
         if (mSerialIoManager != null) {
             Log.i(TAG, "Stopping io manager ..");
+            Toast.makeText(this, "Stopping IO Manager", Toast.LENGTH_LONG).show();
             mSerialIoManager.stop();
             mSerialIoManager = null;
         }
@@ -255,6 +225,7 @@ public class SerialConsoleActivity extends Activity {
     private void startIoManager() {
         if (sPort != null) {
             Log.i(TAG, "Starting io manager ..");
+            Toast.makeText(this, "Starting IO Manager", Toast.LENGTH_LONG).show();
             mSerialIoManager = new SerialInputOutputManager(sPort, mListener);
             mExecutor.submit(mSerialIoManager);
         }
@@ -266,9 +237,12 @@ public class SerialConsoleActivity extends Activity {
     }
 
     private void updateReceivedData(byte[] data) {
-        final String message = "Read " + data.length + " bytes: \n"
-                + HexDump.dumpHexString(data) + "\n\n";
-        mDumpTextView.append(message);
+        final String message = "\n" + HexDump.dumpHexString(data) + "\n\n";
+        String filteredMessage = "";
+        if (message.contains("++")){
+            filteredMessage = message.substring(6);
+            mDumpTextView.append(filteredMessage);
+        }
         mScrollView.smoothScrollTo(0, mDumpTextView.getBottom());
     }
 
@@ -280,6 +254,15 @@ public class SerialConsoleActivity extends Activity {
      */
     public static void show(Context context, UsbSerialPort port) {
         sPort = port;
+        final Intent intent = new Intent(context, SerialConsoleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
+    }
+
+    public static void showagain(Context context, UsbSerialPort port, Settings setting) {
+        sPort = port;
+        sett = setting;
+
         final Intent intent = new Intent(context, SerialConsoleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);

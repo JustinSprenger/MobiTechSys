@@ -86,7 +86,6 @@ public class JSONParser {
         try {
             settings = reader.getJSONObject("settings");
             user = settings.getString("username");
-            user = user + "hat geklappt";
         }catch (Exception e){
             e.printStackTrace();
             user = "Exception";
