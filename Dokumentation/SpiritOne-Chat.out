@@ -1,0 +1,14 @@
+\BOOKMARK [1][-]{section.1}{Einleitung}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Problem- und Aufgabenstellung}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Grundlagen}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{UART-Schnittstelle}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{USBHost}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{usb-serial-for-Android}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Erstellen der Anwendung}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Ans\344tze}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Umstieg auf die usb-serial-for-Android API}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Implementieren der Hauptanwendung}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.4}{Implementieren eine JSON-Parsers und der Settings}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{Ergebnis}{}% 12
+\BOOKMARK [1][-]{section.5}{Literaturverzeichnis}{}% 13
+\BOOKMARK [1][-]{section.6}{Anhang}{}% 14
