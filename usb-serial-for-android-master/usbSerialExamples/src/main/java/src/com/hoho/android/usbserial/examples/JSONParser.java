@@ -2,6 +2,7 @@ package src.com.hoho.android.usbserial.examples;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +10,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import static android.content.ContentValues.TAG;
 
 public class JSONParser {
 
@@ -22,16 +26,10 @@ public class JSONParser {
             InputStream input = mngr.open("settings.json");
             int size = input.available();
             byte[] bytebuffer = new byte[size];
-            input.read();
+            input.read(bytebuffer);
             input.close();
 
             in = new String(bytebuffer, "UTF8");
-            JSONArray jsonArray = new JSONArray(in);
-
-
-            for (int i = 0;i<jsonArray.length();i++){
-                reader = jsonArray.getJSONObject(i);
-            }
 
             reader = new JSONObject(in);
         }catch (Exception e){

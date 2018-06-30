@@ -23,6 +23,7 @@ package com.hoho.android.usbserial.util;
 
 import android.hardware.usb.UsbRequest;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 

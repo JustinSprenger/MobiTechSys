@@ -73,6 +73,7 @@ public class SerialConsoleActivity extends Activity {
     private CheckBox chkDTR;
     private CheckBox chkRTS;
     private TextView sendText;
+    private boolean ato=false;
 
     Settings sett;
 
@@ -90,11 +91,16 @@ public class SerialConsoleActivity extends Activity {
     public void senden(String msg) {
         try {
             //Keys funktionsfähig machen und SendText appenden
-            String firstKey = "+++";
-            String secondKey = "ato";
-            //mSerialIoManager.writeAsync(firstKey.getBytes());
-            //mSerialIoManager.writeAsync(secondKey.getBytes());
+            if(ato != true){
+                String firstKey = "+++";
+                String secondKey = "ato";
+                mSerialIoManager.writeAsync(firstKey.getBytes());
+                mSerialIoManager.writeAsync(secondKey.getBytes());
+                ato = true;
+                Toast.makeText(this, "+++ ato wurde gesetzt", Toast.LENGTH_SHORT).show();
+            }
             mSerialIoManager.writeAsync(msg.getBytes());
+            Toast.makeText(this, "+++ ato", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
