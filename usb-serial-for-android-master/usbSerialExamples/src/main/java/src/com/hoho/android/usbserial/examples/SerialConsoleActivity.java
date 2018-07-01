@@ -79,7 +79,8 @@ public class SerialConsoleActivity extends Activity {
     public void sendenButton(View v){
         try {
             String msg = sendText.getText().toString();
-            Toast.makeText(this, msg.getBytes().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "" , Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, msg.getBytes().toString(), Toast.LENGTH_SHORT).show();
             senden(msg);
             sendText.setText("");
         } catch (Exception e) {
@@ -88,11 +89,28 @@ public class SerialConsoleActivity extends Activity {
     }
 
     public void senden(String msg) {
+        byte[] message;
+        byte[] newmessage;
+        byte[] pack = new byte[16];
         try {
             //Keys funktionsfähig machen und SendText appenden
-            mSerialIoManager.writeAsync((firstKey + user + " " + msg).getBytes());
-            //mSerialIoManager.writeAsync(user.getBytes());
-            //mSerialIoManager.writeAsync(msg.getBytes());
+            /*
+            message = (firstKey + user + " " + msg).getBytes();
+
+            if(message.length>16){
+                for(int i = 0;i<16;i++){
+                    pack[i] = message[i];
+                }
+                newmessage = new byte[message.length-16];
+                for(int i = 0;i<message.length-16;i++){
+                    newmessage[i] = message[i+16];
+                }
+                message = newmessage;
+            }else{
+
+            }
+            */
+            mSerialIoManager.getDriver().write((firstKey + user + " " + msg).getBytes() , 5000);
         } catch (Exception e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }

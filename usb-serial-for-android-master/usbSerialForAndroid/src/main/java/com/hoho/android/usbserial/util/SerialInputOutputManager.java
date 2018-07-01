@@ -99,6 +99,10 @@ public class SerialInputOutputManager implements Runnable {
         return mListener;
     }
 
+    public UsbSerialPort getDriver(){
+        return mDriver;
+    }
+
     public void writeAsync(byte[] data) {
         synchronized (mWriteBuffer) {
             mWriteBuffer.put(data);
