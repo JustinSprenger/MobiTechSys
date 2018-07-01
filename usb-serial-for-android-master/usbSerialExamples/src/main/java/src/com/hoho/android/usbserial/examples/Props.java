@@ -102,12 +102,12 @@ public class Props extends AppCompatActivity implements AdapterView.OnItemSelect
         sett.setParity(parity);
         sett.setUsername(username);
 
-        JSONParser json = new JSONParser(getApplicationContext()); //Parser
-        json.setBaudrate(baudrate); //init Settings
-        json.setDataBit(databit); //init Settings
-        json.setStartStop(startstop); //init Settings
-        json.setParity(parity); //init Settings
-        json.setUsername(username); //init Settings
+        //JSONParser json = new JSONParser(getApplicationContext()); //Parser
+        //json.setBaudrate(baudrate); //init Settings
+        //json.setDataBit(databit); //init Settings
+        //json.setStartStop(startstop); //init Settings
+        //json.setParity(parity); //init Settings
+        //json.setUsername(username); //init Settings
 
         SerialConsoleActivity.showagain(this,sPort,sett);
         //Intent intent = new Intent(this, SerialConsoleActivity.class);

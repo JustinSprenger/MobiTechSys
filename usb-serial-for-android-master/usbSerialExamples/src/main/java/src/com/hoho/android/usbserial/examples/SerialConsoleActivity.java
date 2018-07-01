@@ -58,7 +58,7 @@ public class SerialConsoleActivity extends Activity {
     /**
      * Driver instance, passed in statically via
      * {@link #show(Context, UsbSerialPort)}.
-     *
+     * <p>
      * <p/>
      * This is a devious hack; it'd be cleaner to re-create the driver using
      * arguments passed in with the {@link #startActivity(Intent)} intent. We
@@ -66,20 +66,21 @@ public class SerialConsoleActivity extends Activity {
      * process, and this is a simple demo.
      */
     private static UsbSerialPort sPort = null;
+    private static UsbSerialPort originPort = null;
 
     private TextView mTitleTextView;
     private TextView mDumpTextView;
     private ScrollView mScrollView;
     private TextView sendText;
-    private String firstKey = "+++++";
-    private String user="<>";
+    private String firstKey = "zzzzz";
+    private String user = "<>";
 
     private static Settings sett;
 
-    public void sendenButton(View v){
+    public void sendenButton(View v) {
         try {
             String msg = sendText.getText().toString();
-            Toast.makeText(this, "" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
             //Toast.makeText(this, msg.getBytes().toString(), Toast.LENGTH_SHORT).show();
             senden(msg);
             sendText.setText("");
@@ -92,32 +93,49 @@ public class SerialConsoleActivity extends Activity {
         byte[] message;
         byte[] newmessage;
         byte[] pack = new byte[16];
+        boolean first = true;
         try {
             //Keys funktionsfähig machen und SendText appenden
-            /*
-            message = (firstKey + user + " " + msg).getBytes();
+            switch (msg) {
+                case "ato":
+                    mSerialIoManager.getDriver().write("ato".getBytes(), 5000);
+                    break;
+                case "+++":
+                    mSerialIoManager.getDriver().write("+++".getBytes(), 5000);
+                    break;
+                default:
 
-            if(message.length>16){
-                for(int i = 0;i<16;i++){
-                    pack[i] = message[i];
-                }
-                newmessage = new byte[message.length-16];
-                for(int i = 0;i<message.length-16;i++){
-                    newmessage[i] = message[i+16];
-                }
-                message = newmessage;
-            }else{
+                    if (first) {
+                        message = (firstKey + user + " " + msg).getBytes();
+                        first = false;
+                    } else {
+                        message = (firstKey + msg).getBytes();
+                    }
 
+                    mSerialIoManager.getDriver().write((firstKey + user + " " + msg).getBytes(), 5000);
+                    // 16 auf 8 reduzieren, zzzzz zu jeder Nachricht am Anfang hinzufügen, ab zweiter Nachricht senden
+                    final int MAX_MSG_LENGTH = 8;
+                    while (message.length > MAX_MSG_LENGTH) {
+                        System.arraycopy(message, 0, pack, 0, MAX_MSG_LENGTH);
+                        newmessage = new byte[message.length - MAX_MSG_LENGTH];
+                        System.arraycopy(message, MAX_MSG_LENGTH, newmessage, 0, message.length - MAX_MSG_LENGTH);
+                        message = newmessage;
+                        mSerialIoManager.getDriver().write(pack, 5000);
+                    }
+
+
+                    //mSerialIoManager.writeAsync((firstKey + user + " " + msg).getBytes());
+                    //mSerialIoManager.getDriver().write((firstKey + user + " " + msg).getBytes() , 5000);
+                    //sPort = originPort;
+                    break;
             }
-            */
-            mSerialIoManager.getDriver().write((firstKey + user + " " + msg).getBytes() , 5000);
         } catch (Exception e) {
-            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Exception", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void configuration(View v){
-        Props.show(this,sPort);
+    public void configuration(View v) {
+        Props.show(this, sPort);
         //Intent intent = new Intent(this, Props.class);
         //startActivity(intent);
     }
@@ -129,21 +147,21 @@ public class SerialConsoleActivity extends Activity {
     private final SerialInputOutputManager.Listener mListener =
             new SerialInputOutputManager.Listener() {
 
-        @Override
-        public void onRunError(Exception e) {
-            Log.d(TAG, "Runner stopped.");
-        }
-
-        @Override
-        public void onNewData(final byte[] data) {
-            SerialConsoleActivity.this.runOnUiThread(new Runnable() {
                 @Override
-                public void run() {
-                    SerialConsoleActivity.this.updateReceivedData(data);
+                public void onRunError(Exception e) {
+                    Log.d(TAG, "Runner stopped.");
                 }
-            });
-        }
-    };
+
+                @Override
+                public void onNewData(final byte[] data) {
+                    SerialConsoleActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SerialConsoleActivity.this.updateReceivedData(data);
+                        }
+                    });
+                }
+            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -160,8 +178,8 @@ public class SerialConsoleActivity extends Activity {
         Toast.makeText(this, sett.getUsername(), Toast.LENGTH_LONG).show();
 
         Intent i = getIntent();
-        if(i != null){
-            sett = (Settings)i.getSerializableExtra("settings");
+        if (i != null) {
+            sett = (Settings) i.getSerializableExtra("settings");
         }
     }
 
@@ -180,7 +198,7 @@ public class SerialConsoleActivity extends Activity {
         finish();
     }
 
-    void showStatus(TextView theTextView, String theLabel, boolean theValue){
+    void showStatus(TextView theTextView, String theLabel, boolean theValue) {
         String msg = theLabel + ": " + (theValue ? "enabled" : "disabled") + "\n";
         theTextView.append(msg);
     }
@@ -209,7 +227,7 @@ public class SerialConsoleActivity extends Activity {
                 //sPort.setParameters(sett.getBaudrate(), sett.getDatabits(), sett.getStopbit(), sett.getParity());
                 try {
                     Toast.makeText(this, sett.getUsername() + "Baudrate", Toast.LENGTH_SHORT).show();
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(this, "Exception", Toast.LENGTH_SHORT).show();
                 }
                 user = "<" + sett.getUsername() + ">";
@@ -257,9 +275,9 @@ public class SerialConsoleActivity extends Activity {
     private void updateReceivedData(byte[] data) {
         final String message = "\n" + HexDump.dumpHexString(data) + "\n\n";
         String filteredMessage = "";
-        if (message.contains("++")){
+        if (message.contains("zz")) {
             filteredMessage = message.substring(6);
-            mDumpTextView.append(filteredMessage);
+            mDumpTextView.append(message);
         }
         mScrollView.smoothScrollTo(0, mDumpTextView.getBottom());
     }
@@ -272,6 +290,7 @@ public class SerialConsoleActivity extends Activity {
      */
     public static void show(Context context, UsbSerialPort port) {
         sPort = port;
+        originPort = port;
         final Intent intent = new Intent(context, SerialConsoleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
