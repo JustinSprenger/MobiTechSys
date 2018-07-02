@@ -74,7 +74,7 @@ public class HexDump {
                 if (line[i] > ' ' && line[i] < '~') {
                     result.append(new String(line, i, 1));
                 } else {
-                    result.append(".");
+                    result.append(" ");
                 }
             }
         }

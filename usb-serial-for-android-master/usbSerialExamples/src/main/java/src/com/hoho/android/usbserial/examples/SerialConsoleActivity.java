@@ -72,7 +72,7 @@ public class SerialConsoleActivity extends Activity {
     private TextView mDumpTextView;
     private ScrollView mScrollView;
     private TextView sendText;
-    private String firstKey = "zzzzz";
+    private final String FIRST_KEY = "_____";
     private String user = "<>";
 
     private static Settings sett;
@@ -90,12 +90,12 @@ public class SerialConsoleActivity extends Activity {
     }
 
     public void senden(String msg) {
-        byte[] message;
-        byte[] newmessage;
-        byte[] pack = new byte[16];
-        boolean first = true;
         try {
             //Keys funktionsfähig machen und SendText appenden
+            byte[] message = (FIRST_KEY + user + " " + msg).getBytes();
+            byte[] message2;
+            byte[] pack = new byte[8];
+            byte[] newMessage;
             switch (msg) {
                 case "ato":
                     mSerialIoManager.getDriver().write("ato".getBytes(), 5000);
@@ -104,29 +104,28 @@ public class SerialConsoleActivity extends Activity {
                     mSerialIoManager.getDriver().write("+++".getBytes(), 5000);
                     break;
                 default:
+                    for (int i = 0;i<=8;i++) {
+                        if(message.length>8){
+                            System.arraycopy(message, 0, pack, 0, 8);
+                            newMessage = new byte[message.length - 8];
+                            System.arraycopy(message, 8, newMessage, 0, newMessage.length);
+                            message2 = new byte[FIRST_KEY.getBytes().length + newMessage.length];
+                            System.arraycopy(FIRST_KEY.getBytes(), 0, message2, 0, FIRST_KEY.getBytes().length);
+                            System.arraycopy(newMessage, 0, message2, FIRST_KEY.getBytes().length, newMessage.length);
 
-                    if (first) {
-                        message = (firstKey + user + " " + msg).getBytes();
-                        first = false;
-                    } else {
-                        message = (firstKey + msg).getBytes();
+                            mSerialIoManager.getDriver().write(pack,0);
+                            //mDumpTextView.append(HexDump.dumpHexString(pack).replace("_",""));
+                            //System.out.println(HexDump.dumpHexString(pack));
+                            message = message2;
+                        }else{
+                            mSerialIoManager.getDriver().write(message,0);
+                            //mDumpTextView.append(HexDump.dumpHexString(message).replace("_",""));
+                            //System.out.println(HexDump.dumpHexString(message));
+                            break;
+                        }
                     }
-
-                    mSerialIoManager.getDriver().write((firstKey + user + " " + msg).getBytes(), 5000);
-                    // 16 auf 8 reduzieren, zzzzz zu jeder Nachricht am Anfang hinzufügen, ab zweiter Nachricht senden
-                    final int MAX_MSG_LENGTH = 8;
-                    while (message.length > MAX_MSG_LENGTH) {
-                        System.arraycopy(message, 0, pack, 0, MAX_MSG_LENGTH);
-                        newmessage = new byte[message.length - MAX_MSG_LENGTH];
-                        System.arraycopy(message, MAX_MSG_LENGTH, newmessage, 0, message.length - MAX_MSG_LENGTH);
-                        message = newmessage;
-                        mSerialIoManager.getDriver().write(pack, 5000);
-                    }
-
-
-                    //mSerialIoManager.writeAsync((firstKey + user + " " + msg).getBytes());
-                    //mSerialIoManager.getDriver().write((firstKey + user + " " + msg).getBytes() , 5000);
-                    //sPort = originPort;
+                    //mSerialIoManager.getDriver().write((FIRST_KEY + user + " " + msg).getBytes() , 5000);
+                    mDumpTextView.append("\n<ich> " + msg + "\n");
                     break;
             }
         } catch (Exception e) {
@@ -273,11 +272,14 @@ public class SerialConsoleActivity extends Activity {
     }
 
     private void updateReceivedData(byte[] data) {
-        final String message = "\n" + HexDump.dumpHexString(data) + "\n\n";
+        final String message = HexDump.dumpHexString(data);
         String filteredMessage = "";
-        if (message.contains("zz")) {
-            filteredMessage = message.substring(6);
-            mDumpTextView.append(message);
+        if (message.contains("__")) {
+            filteredMessage = message.replace("_","");
+            if(filteredMessage.startsWith("<")){
+                mDumpTextView.append("\n");
+            }
+            mDumpTextView.append(filteredMessage);
         }
         mScrollView.smoothScrollTo(0, mDumpTextView.getBottom());
     }
