@@ -71,6 +71,7 @@ public class Uart extends AppCompatActivity {
                 uartRun = new UartRun(usbManager,usbDevice,usbInterface,endIn,endOut,this);
                 com = new Thread(uartRun);
                 com.start();
+                conn.controlTransfer(0x40, 0x03, baudrate115200, 0, null, 0, 0)
                 tv.setText(tv.getText() + "\n Thread gestartet");
             }catch (Exception e){
                 Toast.makeText(this, "err", Toast.LENGTH_SHORT).show();

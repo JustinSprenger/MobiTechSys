@@ -72,6 +72,7 @@ public class SerialConsoleActivity extends Activity {
     private TextView mDumpTextView;
     private ScrollView mScrollView;
     private TextView sendText;
+    private final int PAYLOAD_SIZE = 64;
     private final String FIRST_KEY = "_____";
     private String user = "<>";
 
@@ -94,7 +95,7 @@ public class SerialConsoleActivity extends Activity {
             //Keys funktionsfähig machen und SendText appenden
             byte[] message = (FIRST_KEY + user + " " + msg).getBytes();
             byte[] message2;
-            byte[] pack = new byte[8];
+            byte[] pack = new byte[PAYLOAD_SIZE];
             byte[] newMessage;
             switch (msg) {
                 case "ato":
@@ -103,28 +104,32 @@ public class SerialConsoleActivity extends Activity {
                 case "+++":
                     mSerialIoManager.getDriver().write("+++".getBytes(), 5000);
                     break;
+                case "at/s":
+                    mSerialIoManager.getDriver().write("at/s".getBytes(), 5000);
+                    break;
+                case "at/c":
+                    mSerialIoManager.getDriver().write("at/c".getBytes(), 5000);
+                    break;
+                case "ats08=-130":
+                    mSerialIoManager.getDriver().write("ats08=-130".getBytes(), 5000);
+                    break;
                 default:
-                    for (int i = 0;i<=8;i++) {
-                        if(message.length>8){
-                            System.arraycopy(message, 0, pack, 0, 8);
-                            newMessage = new byte[message.length - 8];
-                            System.arraycopy(message, 8, newMessage, 0, newMessage.length);
+                    for (int i = 0;i<=PAYLOAD_SIZE;i++) {
+                        if(message.length>PAYLOAD_SIZE){
+                            System.arraycopy(message, 0, pack, 0, PAYLOAD_SIZE);
+                            newMessage = new byte[message.length - PAYLOAD_SIZE];
+                            System.arraycopy(message, PAYLOAD_SIZE, newMessage, 0, newMessage.length);
                             message2 = new byte[FIRST_KEY.getBytes().length + newMessage.length];
                             System.arraycopy(FIRST_KEY.getBytes(), 0, message2, 0, FIRST_KEY.getBytes().length);
                             System.arraycopy(newMessage, 0, message2, FIRST_KEY.getBytes().length, newMessage.length);
 
-                            mSerialIoManager.getDriver().write(pack,0);
-                            //mDumpTextView.append(HexDump.dumpHexString(pack).replace("_",""));
-                            //System.out.println(HexDump.dumpHexString(pack));
+                            mSerialIoManager.getDriver().write(pack,1000);
                             message = message2;
                         }else{
-                            mSerialIoManager.getDriver().write(message,0);
-                            //mDumpTextView.append(HexDump.dumpHexString(message).replace("_",""));
-                            //System.out.println(HexDump.dumpHexString(message));
+                            mSerialIoManager.getDriver().write(message,1000);
                             break;
                         }
                     }
-                    //mSerialIoManager.getDriver().write((FIRST_KEY + user + " " + msg).getBytes() , 5000);
                     mDumpTextView.append("\n<ich> " + msg + "\n");
                     break;
             }
@@ -172,10 +177,11 @@ public class SerialConsoleActivity extends Activity {
         sendText = (TextView) findViewById(R.id.sendText);
 
         json = new JSONParser(getApplicationContext());
-        sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername());
-
+        if(sett==null) {
+            sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername());
+        }
         Toast.makeText(this, sett.getUsername(), Toast.LENGTH_LONG).show();
-
+        user = "<" + sett.getUsername() + ">";
         Intent i = getIntent();
         if (i != null) {
             sett = (Settings) i.getSerializableExtra("settings");
@@ -208,7 +214,10 @@ public class SerialConsoleActivity extends Activity {
         Log.d(TAG, "Resumed, port=" + sPort);
 
         json = new JSONParser(getApplicationContext()); //Parser
-        sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername()); //init Settings
+        if(sett==null){
+            Toast.makeText(this, "sett ist Null", Toast.LENGTH_SHORT).show();
+            sett = new Settings(json.getBaudrate(), json.getParity(), json.getStartStop(), json.getDataBit(), json.getUsername()); //init Settings
+        }
 
         if (sPort == null) {
             mTitleTextView.setText("No serial device.");
@@ -223,14 +232,15 @@ public class SerialConsoleActivity extends Activity {
 
             try {
                 sPort.open(connection);
-                //sPort.setParameters(sett.getBaudrate(), sett.getDatabits(), sett.getStopbit(), sett.getParity());
                 try {
+                    sPort.setParameters(sett.getBaudrate(), sett.getDatabits(), sett.getStopbit(), sett.getParity());
                     Toast.makeText(this, sett.getUsername() + "Baudrate", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(this, "Exception", Toast.LENGTH_SHORT).show();
+                    sPort.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
                 }
                 user = "<" + sett.getUsername() + ">";
-                sPort.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
+                //sPort.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
 
             } catch (IOException e) {
                 Log.e(TAG, "Error setting up device: " + e.getMessage(), e);
@@ -276,7 +286,7 @@ public class SerialConsoleActivity extends Activity {
         String filteredMessage = "";
         if (message.contains("__")) {
             filteredMessage = message.replace("_","");
-            if(filteredMessage.startsWith("<")){
+            if(filteredMessage.contains("<")||filteredMessage.contains(">")){
                 mDumpTextView.append("\n");
             }
             mDumpTextView.append(filteredMessage);
@@ -303,7 +313,7 @@ public class SerialConsoleActivity extends Activity {
         sett = setting;
 
         final Intent intent = new Intent(context, SerialConsoleActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }
 
