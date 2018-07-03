@@ -1,14 +1,16 @@
 \contentsline {section}{\numberline {1}Einleitung}{3}{section.1}
-\contentsline {subsection}{\numberline {1.1}Problem- und Aufgabenstellung}{3}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.1}Zusammenfassung}{3}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Mitwirkende}{3}{subsection.1.2}
 \contentsline {section}{\numberline {2}Grundlagen}{3}{section.2}
-\contentsline {subsection}{\numberline {2.1}UART-Schnittstelle}{3}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}USBHost}{3}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}usb-serial-for-Android}{3}{subsection.2.3}
-\contentsline {section}{\numberline {3}Erstellen der Anwendung}{3}{section.3}
-\contentsline {subsection}{\numberline {3.1}Ans\IeC {\"a}tze}{3}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Umstieg auf die usb-serial-for-Android API}{4}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Implementieren der Hauptanwendung}{4}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Implementieren eine JSON-Parsers und der Settings}{4}{subsection.3.4}
-\contentsline {section}{\numberline {4}Ergebnis}{4}{section.4}
-\contentsline {section}{\numberline {5}Literaturverzeichnis}{4}{section.5}
-\contentsline {section}{\numberline {6}Anhang}{4}{section.6}
+\contentsline {subsection}{\numberline {2.1}Kurzbeschreibung des STEVAL-SP1ML868}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Kurzbeschreibung des SPIRIT1}{4}{subsection.2.2}
+\contentsline {section}{\numberline {3}Implementierung der Anwendung}{4}{section.3}
+\contentsline {subsection}{\numberline {3.1}L\IeC {\"o}sungsans\IeC {\"a}tze}{4}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Umsetzung mit der usb-serial-for-Android Library}{5}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Empfangen}{5}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}Senden}{6}{subsubsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.3}Settings}{7}{subsubsection.3.2.3}
+\contentsline {subsection}{\numberline {3.3}Probleme}{7}{subsection.3.3}
+\contentsline {section}{\numberline {4}Ergebnis}{7}{section.4}
+\contentsline {section}{\numberline {5}Literaturverzeichnis}{8}{section.5}
+\contentsline {section}{\numberline {6}Anhang}{8}{section.6}
